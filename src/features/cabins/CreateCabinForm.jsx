@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
@@ -28,7 +26,8 @@ function CreateCabinForm() {
   });
 
   function onSubmit(data) {
-    mutate(data);
+    console.log(data.image[0]);
+    mutate({ ...data, image: data.image[0] });
   }
   function onError(error) {
     //console.log(error);
@@ -69,8 +68,9 @@ function CreateCabinForm() {
           {...register("discount", {
             required: "This field is required",
             validate: (value) => {
+              console.log(getValues().regularPrice, value);
               return (
-                value <= getValues().regularPrice ||
+                value < getValues().regularPrice ||
                 "Discount should be less than regular price"
               );
             },
@@ -88,7 +88,11 @@ function CreateCabinForm() {
       </FormRow>
 
       <FormRow label="Cabin Photo">
-        <FileInput id="image" accept="image/*" />
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", { required: "This field is required" })}
+        />
       </FormRow>
 
       <FormRow>
